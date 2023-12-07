@@ -1,0 +1,80 @@
+version: '3'
+services:
+    backend_1:
+        build:
+          context: backend
+          dockerfile: servicio_1/Dockerfile
+        container_name: APP_back_servicio_1
+        restart: unless-stopped
+        env_file: .env
+        volumes:
+          - ../../data/APP/backend_1:/app
+        depends_on:
+          - mongodb
+        networks:
+          - frontnet
+          - backnet
+
+    frontend_1:
+        build:
+          context: frontend
+          dockerfile: servicio_1/Dockerfile
+        container_name: APP_front_servicio_1
+        restart: unless-stopped
+        env_file: .env
+        volumes:
+          - ../../data/APP/frontend_1:/app
+        depends_on:
+          - mongodb
+        networks:
+          - frontnet
+          - backnet
+          
+      
+    webserver:
+        image: nginx:latest
+        container_name: APP_webserver
+        restart: always
+        environment:
+          APP_ENV: "prod"
+          APP_NAME: "APP"
+          APP_DEBUG: "true"
+          SERVICE_NAME: "APP"
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - ./nginx/conf.d/:/etc/nginx/conf.d/
+          - ../../data/APP/nginxdata/:/var/log/nginx/
+          - ./nginx/html/:/usr/share/nginx/html/
+          - ./nginx/certificates/:/usr/share/nginx/certificates/
+        depends_on:
+          - backend_1
+          - frontend_1
+          - mongodb
+        networks:
+          - frontnet
+      
+    mongodb:
+        hostname: mongodb
+        container_name: APP-mongodb  
+        image: mongo
+        env_file: .env
+        restart: always
+        ports: 
+          - "27017:27017"
+        volumes:
+          - ../../data/APP/mongodb:/data/db
+          - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+        networks:
+          - backnet
+
+networks:
+  backnet:
+    driver: bridge
+  frontnet:
+    driver: bridge
+  
+ 
+   
+   
