@@ -1,4 +1,4 @@
-DOCKER+NGINX+FLASK+MONGO_TEMPLATE
+DOCKER+NGINX+FLASK+MONGO_TEMPLATE (Work in progress)
 
 This python's project template was created as a base project for new applications.
 
