@@ -10,7 +10,7 @@ db.createUser({
     ],
 });
 
-db = new Mongo().getDB("ATSA_Services");
+db = new Mongo().getDB("APP_Services");
 
 // CONGIGURACION DE LOS USUARIOS 
 try {
@@ -21,9 +21,9 @@ try {
 
 db.users.insertMany([{
     "username": "admin", 
-    "password": "c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec", //admin
+    "password": "pbkdf2:sha256:260000$bUwYtEBUIDwMt4fh$ab97b78244823a6426f9fbcd081bbd9329c4971d249263561b630e80f07a407d", //administrador
     "email" : "admin@admin.com",
-    "fullname" : "Admin",
-    "isActive": true,
-    "isAdmin": true
+    "fullname" : "Administrador",
+    "is_active": true,
+    "is_admin": true
 }]);

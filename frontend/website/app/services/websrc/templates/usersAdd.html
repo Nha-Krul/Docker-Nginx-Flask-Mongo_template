@@ -1,0 +1,152 @@
+{% extends "base.html" %} 
+
+{% block title %}
+{% if edit==False %}
+<div class="container mt-1" style="min-width: 100%;">
+  <table  class="table">
+      <thead>
+      <tr>
+          <th scope="col"><h3>Nuevo Usuario</h3></th>
+      </tr>
+      </thead>
+      
+  </table>
+</div>
+{% else %}
+<div class="container mt-1" style="min-width: 100%;">
+  <table  class="table">
+      <thead>
+      <tr>
+          <th scope="col"><h3>Editando al usuario {{nombre}}</h3></th>
+      </tr>
+      </thead>
+      
+  </table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-1" style="max-width: 400px; margin-top: 10px;">
+    {% if edit == True %}
+    <form method="POST" class = "needs-validation" novalidate>
+    <div class="form-group">
+      <label for="ident">Identificador #</label>
+      <input
+        type="ident"
+        class="form-control"
+        id="ident"
+        name="ident"
+        placeholder="Id"
+        disabled
+        value="{{ id }}"
+        required
+      />
+    </div>
+    {% else %}
+    <form method="POST">
+    {% endif %}
+      <div class="form-group">
+        <label for="nombre">Nombre de usuario</label>
+        <input
+          type="nombre"
+          class="form-control"
+          id="nombre"
+          name="nombre"
+          placeholder="Ingresar nombre"
+          {% if nombre %}
+          value = {{ nombre }}
+          {% endif %}
+          {% if edit == True %}
+          disabled
+          {% else %}
+          {% endif %}
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          placeholder="Ingresar email"
+          {% if email %}
+          value = {{ email }}
+          {% endif %}
+          {% if edit == True %}
+          disabled
+          {% else %}
+          {% endif %}
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password1"
+          name="password1"
+          placeholder="Ingresar contraseña"
+          {% if password1 %}
+          value = {{ password1 }}
+          {% endif %}
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password2">Password (Confirm)</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password2"
+          name="password2"
+          placeholder="Repetir contraseña"
+          required
+        />
+      </div>
+      
+      <div class="form-check form-group" style="margin-top: 15px;">
+        <input class="form-check-input" type="checkbox" value="" id="isAdmin" name="isAdmin" {% if isAdmin==True %} checked {% endif %}>
+        <label class="form-check-label" for="flexCheckDefault">
+          Es Administrador
+        </label>
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary">Enviar</button>
+      <button type="cancel" class="btn btn-primary" onclick="window.location.href ='/users'">Cancelar</button>
+    </form>
+  </div>
+  {% endblock %}
+
+  {% block scripts %}
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+      })()
+  </script>
+  {% endblock %}
+
+  {# Bloques del base.html a eliminar #}
+
+{% block modal %}{% endblock %}
+{% block toast %}{% endblock %}

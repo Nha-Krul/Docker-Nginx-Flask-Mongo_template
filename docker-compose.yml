@@ -8,7 +8,7 @@ services:
         restart: unless-stopped
         env_file: .env
         volumes:
-          - ../../data/APP/backend_1:/app
+          - ../../data/APP/backend_1:/var/www/log/
         depends_on:
           - mongodb
         networks:
@@ -18,12 +18,12 @@ services:
     frontend_1:
         build:
           context: frontend
-          dockerfile: servicio_1/Dockerfile
+          dockerfile: website/Dockerfile
         container_name: APP_front_servicio_1
         restart: unless-stopped
         env_file: .env
         volumes:
-          - ../../data/APP/frontend_1:/app
+          - ../../data/APP/frontend_1:/var/www/log/
         depends_on:
           - mongodb
         networks:

@@ -19,7 +19,7 @@ def test_connection():
 
         # Realiza operaciones en la nueva base de datos si es necesario
         # Ejemplo: consulta todos los documentos en una colección
-        collection_name = 'servicio_1'
+        collection_name = 'users'
         documents = db[collection_name].find()
 
         print(f"Documentos en la colección {collection_name}:")

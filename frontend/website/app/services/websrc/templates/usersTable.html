@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title%}
+<div class="container mt-1" style="min-width: 100%;">
+    <table  class="table">
+        <thead>
+        <tr>
+            <th scope="col"><h3>Lista de Usuarios</h3></th>
+            <td align="right"><button type="button" class="btn btn-primary" onclick="location.href='/users/adduser';">Nuevo Usuario</button></td>
+        </tr>
+        </thead>
+        
+    </table>
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-0" style="min-width: 100%;">
+    <div class="table-responsive mx-auto text-center">
+        {# Encabezado #}
+        <table id="table" class="table">
+            <thead>
+            <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Usuario</th>
+                <th class="text-center" scope="col">Email</th>
+                <th class="text-center" scope="col">Administrador</th>           
+                <th class="text-center" scope="col">Habilitado</th>
+                <th class="text-center" scope="col">Operaciones</th>
+            </tr>
+            </thead>
+
+        {# Cuerpo #}
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+            <td class="text-center">{{ usuario["_id"] }}</td>
+            <td class="text-center">{{ usuario["fullname"] }}</td>
+            <td class="text-center">{{ usuario["email"] }}</td>
+            <td class="text-center"><div class="form-check">
+                <div class="d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" value="" id="check_isAdmin{{ usuario['_id'] }}" {% if usuario.is_admin==True %} checked {% endif %} disabled>
+                <label class="form-check-label" for="flexCheckDisabled"></label>
+                </div>
+            </div></td>
+            <td class="text-center"><div class="form-check">
+                <div class="d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" value="" id="check_isActive{{ usuario['_id'] }}" {% if usuario.is_active==True %} checked {% endif %} disabled>
+                <label class="form-check-label" for="flexCheckDisabled"></label>
+                </div>
+            </div></td>
+            <div>
+                {# Botones de comando #}
+                <td class="text-center">
+                    <button class="btn bg-transparent" type="button" name="esuser" value="" onclick="edUser('{{ usuario._id }}', '{{ usuario.fullname }}')" data-toggle="tooltip" data-placement="bottom" title="Activar/Desactivar usuario">
+                        <img src="img/eduser.png" height="24px" width="24px"/>
+                    </button>  
+                    <button class="btn bg-transparent" type="button" name="pwuser" value="" onclick="location.href='/users/pwuser/{{ usuario._id }}';" data-toggle="tooltip" data-placement="bottom" title="Cambiar contraseña usuario">
+                        <img src="img/pwuser.png" height="24px" width="24px"/>
+                    </button> 
+                    <button class="btn bg-transparent" type="button" name="deluser" value="" onclick="delUser('{{ usuario._id }}', '{{ usuario.fullname }}')" data-toggle="tooltip" data-placement="bottom" title="Borrar usuario">
+                        <img src="img/deluser.png" height="24px" width="24px"/>
+                    </button> 
+                </td>
+            </div>
+            {# Agregar la parte de comandos #}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+{# Seteado de la tabla #}
+$(document).ready(function () { 
+    var $table = $('#table');
+    $table[0].className = "table table-striped table-bordered table-sm";
+    $table.DataTable();
+});
+
+{# Funcion para eliminar un usuario #}
+function delUser(id, usuario) 
+{
+    if (confirm("¿Seguro que quiere eliminar el usuario " + usuario + "?") == true)
+    {
+        fetch("/users",
+        {   method: "DELETE",
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(id)
+        }).then(res => {
+            window.location.reload();
+        });
+    }
+}
+
+
+{# Función para Activar o Desactivar a un usuario #}
+function edUser(id, usuario) 
+{
+    
+    fetch("/users/eduser",
+    {   method: "POST",
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify(id)
+    }).then(res => {
+            window.location.reload();
+    });
+    
+}
+
+    
+
+</script>
+{% endblock %}
+
+{# Bloques del base.html a eliminar #}
+
+{% block modal %}{% endblock %}
+{% block toast %}{% endblock %}
